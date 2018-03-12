@@ -13,6 +13,9 @@ passport.use(
   }, (accessToken, refreshToken, profile, done)=>{
       //passport CB function from the redirect URI
       //this is where we exchange the code we get from google after consent and get the actual profile info
+      //this is where we use mLab to check to see if the user exists in our db ...if they do, pull the exisitng info
+      //if not create new profile in the db
+      
       console.log(profile)
   })
 );
