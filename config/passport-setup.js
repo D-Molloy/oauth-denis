@@ -3,6 +3,26 @@ const GoogleStrategy = require("passport-google-oauth20");
 const keys = require("./keys");
 const User = require("../models/user-model");
 
+//2nd
+//serialize user is called after the cb function from the redirect URI
+passport.serializeUser((user, done)=>{
+    //this is the mongo _id not googleId
+    //null is the error
+    done(null, user.id);
+});
+
+//3rd
+//retrieving the user from the id
+passport.deserializeUser((id, done)=>{
+    // search the DB for the id and return the user
+    User.findById(id).then((user)=>{
+        //passing the user to the next stage ()
+        done(null, user);
+    })
+
+});
+
+// 1st
 passport.use(
   new GoogleStrategy(
     {
@@ -25,7 +45,8 @@ passport.use(
       User.findOne({ googleId: profile.id }).then(currentUser => {
         if (currentUser) {
           //already a user
-          console.log("user is: ", currentUser)
+          console.log("user is: ", currentUser);
+            done(null, currentUser);  //goes to serializeUser
         } else {
           //if not create new user
           new User({
@@ -35,6 +56,7 @@ passport.use(
             .save()
             .then(newUser => {
               console.log("new user created: ", newUser);
+              done(null, newUser); //goes to serializeUser
             });
         }
       });
