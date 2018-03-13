@@ -1,6 +1,7 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20");
 const keys = require("./keys")
+const User = require('../models/user-model')
 
 
 passport.use(
@@ -15,8 +16,15 @@ passport.use(
       //this is where we exchange the code we get from google after consent and get the actual profile info
       //this is where we use mLab to check to see if the user exists in our db ...if they do, pull the exisitng info
       //if not create new profile in the db
-      
-      console.log(profile)
+      console.log(profile);
+      //creating a user is asynchronous, so we want to wait until its finished
+      new User({
+          userName: profile.displayName,
+          googleId: profile.id
+      }).save().then((newUser)=> {
+          console.log("new user created: ", newUser)
+      })
+
   })
 );
 
