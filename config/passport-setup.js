@@ -3,6 +3,7 @@ const GoogleStrategy = require("passport-google-oauth20");
 const keys = require("./keys");
 const User = require("../models/user-model");
 
+
 //2nd
 //serialize user is called after the cb function from the redirect URI
 passport.serializeUser((user, done)=>{
@@ -16,7 +17,7 @@ passport.serializeUser((user, done)=>{
 passport.deserializeUser((id, done)=>{
     // search the DB for the id and return the user
     User.findById(id).then((user)=>{
-        //passing the user to the next stage ()
+        //passing the user to the next stage (attaching the user property to the req obj sent to the home route in app js)
         done(null, user);
     })
 
