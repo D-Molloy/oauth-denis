@@ -13,7 +13,7 @@ const authCheck = (req, res, next) => {
 
 router.get("/", authCheck, (req, res) => {
   //use templating to display pages
-  res.send("you are logged in - " + req.user.userName);
+  res.render('profile', {user: req.user})
 });
 
 module.exports = router;
